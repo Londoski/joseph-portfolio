@@ -1,7 +1,5 @@
 "use client";
 
-import { InstallPrompt } from "@/components/admin/InstallPrompt";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -20,8 +18,12 @@ import {
   Palette,
   Globe,
   LogOut,
+  Sun,
+  Moon,
   type LucideIcon,
 } from "lucide-react";
+import { InstallPrompt } from "@/components/admin/InstallPrompt";
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 type NavItem = {
   href: string;
@@ -46,6 +48,7 @@ const navItems: NavItem[] = [
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     setOpen(false);
@@ -53,6 +56,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="min-h-screen bg-base flex">
+      {/* Mobile top bar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-surface border-b border-base flex items-center justify-between px-4 h-14">
         <Link href="/admin" className="text-base font-bold text-primary">
           JCE
@@ -75,18 +79,35 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         />
       )}
 
+      {/* Sidebar */}
       <aside
         className={`fixed md:sticky top-0 left-0 z-50 w-64 h-screen bg-surface border-r border-base flex flex-col transition-transform md:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="px-5 py-5 border-b border-base">
-          <Link href="/" className="text-lg font-bold text-primary">
-            JCE
-          </Link>
-          <p className="text-[10px] uppercase tracking-widest text-muted mt-0.5">
-            Admin Panel
-          </p>
+        <div className="px-5 py-5 border-b border-base flex items-center justify-between">
+          <div>
+            <Link href="/" className="text-lg font-bold text-primary">
+              JCE
+            </Link>
+            <p className="text-[10px] uppercase tracking-widest text-muted mt-0.5">
+              Admin Panel
+            </p>
+          </div>
+
+          {/* Theme toggle — compact icon button */}
+          <button
+            onClick={toggleTheme}
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            className="group relative w-9 h-9 rounded-xl border border-base bg-base flex items-center justify-center text-muted hover:text-primary hover:border-[var(--color-primary)] hover:shadow-[0_0_12px_rgba(232,122,45,0.35)] transition-all"
+          >
+            {theme === "dark" ? (
+              <Sun size={16} strokeWidth={2.2} />
+            ) : (
+              <Moon size={16} strokeWidth={2.2} />
+            )}
+          </button>
         </div>
 
         <nav className="flex-1 p-3 overflow-y-auto">
