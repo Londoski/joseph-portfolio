@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ProjectCard } from "@/components/public/ProjectCard";
+import { ScrollDrivenTestimonials } from "@/components/public/ScrollDrivenTestimonials";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [settings, featured, services] = await Promise.all([
+  const [settings, featured, services, testimonials] = await Promise.all([
     prisma.siteSettings.findFirst(),
     prisma.project.findMany({
       where: { featured: true, published: true },
@@ -17,6 +18,10 @@ export default async function HomePage() {
       orderBy: { order: "asc" },
       take: 4,
     }),
+    prisma.testimonial.findMany({
+      where: { published: true },
+      orderBy: { order: "asc" },
+    }),
   ]);
 
   const heroHeading = settings?.heroHeading ?? "FRAME YOUR STORY.";
@@ -26,9 +31,9 @@ export default async function HomePage() {
   const heroCtaLink = settings?.heroCtaLink ?? "/work";
   const heroSecondary = settings?.heroSecondaryCta ?? "Contact Me";
   const heroSecondaryLink = settings?.heroSecondaryLink ?? "/contact";
-
-  return (
+return (
     <>
+      {/* HERO */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 -z-10">
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-[var(--bg)]" />
@@ -49,7 +54,7 @@ export default async function HomePage() {
           <div className="mt-10 flex flex-wrap gap-4">
             <Link
               href={heroCtaLink}
-              className="bg-primary text-white font-semibold px-7 py-3.5 rounded-full"
+              className="bg-primary text-white font-semibold px-7 py-3.5 rounded-full transition-all hover:shadow-[0_0_20px_rgba(232,122,45,0.4)]"
             >
               {heroCta}
             </Link>
@@ -63,6 +68,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* FEATURED WORK */}
       <section className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
         <div className="flex items-end justify-between mb-12">
           <div>
@@ -75,7 +81,7 @@ export default async function HomePage() {
           </div>
           <Link
             href="/work"
-            className="hidden md:inline text-sm text-muted hover:text-primary"
+            className="hidden md:inline text-sm text-muted hover:text-primary transition-colors"
           >
             View all
           </Link>
@@ -92,6 +98,7 @@ export default async function HomePage() {
         )}
       </section>
 
+      {/* SERVICES PREVIEW */}
       <section className="bg-surface border-y border-base">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <p className="text-xs uppercase tracking-widest text-primary mb-3">
@@ -108,7 +115,7 @@ export default async function HomePage() {
               {services.map((s) => (
                 <div
                   key={s.id}
-                  className="bg-base border border-base rounded-2xl p-6 hover:border-[var(--color-primary)]"
+                  className="bg-base border border-base rounded-2xl p-6 hover:border-[var(--color-primary)] transition-colors"
                 >
                   <div className="w-8 h-0.5 bg-primary mb-4" />
                   <h3 className="text-lg font-semibold text-base">{s.title}</h3>
@@ -129,6 +136,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ABOUT PREVIEW */}
       <section className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
@@ -136,15 +144,16 @@ export default async function HomePage() {
               About
             </p>
             <h2 className="text-3xl md:text-5xl font-bold text-base mb-6">
-              {settings?.aboutHeadline ?? "Creative Director & Cinematographer"}
+              {settings?.aboutHeadline ??
+                "Creative Director & Cinematographer"}
             </h2>
             <p className="text-muted leading-relaxed mb-8">
-              {settings?.aboutBio ??
-                "Creative professional specializing in cinematography and video editing."}
+              {settings?.aboutBio ||
+                "I am a creative professional specializing in cinematography, videography and video editing."}
             </p>
             <Link
               href="/about"
-              className="inline-block border-2 border-base text-base font-semibold px-7 py-3.5 rounded-full transition-all duration-200 hover:border-[var(--color-primary)] hover:text-primary hover:bg-[rgba(232,122,45,0.08)] focus:outline-none focus:border-[var(--color-primary)] focus:text-primary focus:bg-[rgba(232,122,45,0.08)] focus:shadow-[0_0_0_4px_rgba(232,122,45,0.20)] active:scale-95 active:border-[var(--color-primary)] active:text-primary"
+              className="inline-block border-2 border-base text-base font-semibold px-7 py-3.5 rounded-full transition-all duration-200 hover:border-[var(--color-primary)] hover:text-primary hover:bg-[rgba(232,122,45,0.08)] focus:outline-none focus:border-[var(--color-primary)] focus:text-primary focus:bg-[rgba(232,122,45,0.08)] focus:shadow-[0_0_0_4px_rgba(232,122,45,0.20)] active:scale-95"
             >
               More About Me
             </Link>
@@ -164,15 +173,21 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* TESTIMONIALS - scroll-driven glass panels */}
+      <ScrollDrivenTestimonials testimonials={testimonials} />
+
+      {/* CTA */}
       <section className="bg-surface border-t border-base">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 py-24 text-center">
           <h2 className="text-3xl md:text-5xl font-bold text-base mb-6">
             Got a project in mind?
           </h2>
-          <p className="text-muted mb-10">Let&apos;s bring your vision to life.</p>
+          <p className="text-muted mb-10">
+            Let&apos;s bring your vision to life.
+          </p>
           <Link
             href="/contact"
-            className="inline-block bg-primary text-white font-semibold px-8 py-4 rounded-full"
+            className="inline-block bg-primary text-white font-semibold px-8 py-4 rounded-full transition-all hover:shadow-[0_0_20px_rgba(232,122,45,0.4)]"
           >
             Start a Conversation
           </Link>

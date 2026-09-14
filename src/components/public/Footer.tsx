@@ -74,7 +74,7 @@ export async function Footer() {
 
         <div className="mt-12 pt-6 border-t border-base flex flex-col sm:flex-row justify-between text-xs text-muted gap-3">
           <p>© {year} Joseph Chimaobi Egbuonu. All rights reserved.</p>
-          <Link href="/login" className="hover:text-primary">
+          <Link href="/login" className="hover:text-primary transition-colors">
             Admin
           </Link>
         </div>
