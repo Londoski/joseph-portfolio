@@ -4,15 +4,11 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { ServiceWorkerRegister } from "@/components/providers/ServiceWorkerRegister";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
+const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Joseph Chimaobi Egbuonu — Creative Portfolio",
-  description:
-    "Cinematographer, Videographer, Video Editor & Creative Director based in Lagos, Nigeria.",
+  description: "Cinematographer, Videographer, Video Editor & Creative Director.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -40,9 +36,7 @@ export const viewport: Viewport = {
 
 export const dynamic = "force-dynamic";
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
@@ -54,10 +48,7 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#E87A2D" />
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
       </head>
-      <body
-        className={`${inter.variable} antialiased`}
-        suppressHydrationWarning
-      >
+      <body className={`${inter.variable} antialiased`} suppressHydrationWarning>
         <ThemeProvider>{children}</ThemeProvider>
         <ServiceWorkerRegister />
       </body>

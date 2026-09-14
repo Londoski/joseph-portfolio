@@ -9,11 +9,8 @@ export function ServiceWorkerRegister() {
     if (process.env.NODE_ENV !== "production") return;
 
     window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("/sw.js")
-        .catch(() => {});
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
     });
   }, []);
-
   return null;
 }

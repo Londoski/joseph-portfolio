@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { PasswordForm } from "@/components/admin/PasswordForm";
 
 type S = Record<string, string>;
 
@@ -63,7 +64,7 @@ export default function SettingsPage() {
         <header className="mb-6 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-base">Site Settings</h1>
-            <p className="text-muted text-sm mt-0.5">Contact, SEO, footer</p>
+            <p className="text-muted text-sm mt-0.5">Contact, SEO, footer, password</p>
           </div>
           <div className="flex items-center gap-3">
             {saved && <span className="text-xs text-green-400">Saved</span>}
@@ -77,7 +78,8 @@ export default function SettingsPage() {
           </div>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-5 gap-y-4">
+        {/* Site settings */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-5 gap-y-4 mb-8">
           {FIELDS.map((f) => {
             const spanFull = f.type === "textarea";
             return (
@@ -103,6 +105,9 @@ export default function SettingsPage() {
             );
           })}
         </div>
+
+        {/* Password section */}
+        <PasswordForm />
       </div>
     </div>
   );

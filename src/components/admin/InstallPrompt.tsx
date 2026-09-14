@@ -34,7 +34,6 @@ export function InstallPrompt() {
       setDeferred(e as BeforeInstallPromptEvent);
       setVisible(true);
     };
-
     window.addEventListener("beforeinstallprompt", handler);
     return () => window.removeEventListener("beforeinstallprompt", handler);
   }, []);
@@ -56,8 +55,8 @@ export function InstallPrompt() {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-sm z-50">
-      <div className="bg-surface border border-[var(--color-primary)] rounded-2xl p-4 shadow-[0_0_30px_rgba(232,122,45,0.25)]">
+    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-sm z-[60]">
+      <div className="bg-surface border border-[var(--color-primary)] rounded-2xl p-4 shadow-[0_0_30px_rgba(232,122,45,0.3)]">
         <div className="flex items-start gap-3">
           <div className="w-10 h-10 rounded-xl bg-[rgba(232,122,45,0.15)] flex items-center justify-center flex-shrink-0">
             <Download size={18} className="text-primary" />
@@ -66,7 +65,7 @@ export function InstallPrompt() {
             <p className="text-sm font-semibold text-base">Install Admin App</p>
             <p className="text-xs text-muted mt-0.5 leading-relaxed">
               {isIOS
-                ? 'Tap the Share icon in Safari, then "Add to Home Screen".'
+                ? "Tap Share in Safari, then Add to Home Screen."
                 : "Add JCE Admin to your home screen for quick access."}
             </p>
             {!isIOS && (

@@ -1,7 +1,7 @@
 {
   "name": "Joseph Chimaobi Egbuonu — Admin",
   "short_name": "JCE Admin",
-  "description": "Manage your creative portfolio — projects, services, messages",
+  "description": "Manage your creative portfolio",
   "start_url": "/admin",
   "scope": "/",
   "display": "standalone",
@@ -10,46 +10,14 @@
   "theme_color": "#E87A2D",
   "categories": ["productivity", "business"],
   "icons": [
-    {
-      "src": "/icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-maskable-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/apple-touch-icon.png",
-      "sizes": "180x180",
-      "type": "image/png",
-      "purpose": "any"
-    }
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icons/apple-touch-icon.png", "sizes": "180x180", "type": "image/png", "purpose": "any" }
   ],
   "shortcuts": [
-    {
-      "name": "Dashboard",
-      "url": "/admin",
-      "description": "View stats"
-    },
-    {
-      "name": "Projects",
-      "url": "/admin/projects",
-      "description": "Manage portfolio"
-    },
-    {
-      "name": "Messages",
-      "url": "/admin/messages",
-      "description": "Read client inquiries"
-    }
+    { "name": "Dashboard", "url": "/admin" },
+    { "name": "Projects", "url": "/admin/projects" },
+    { "name": "Messages", "url": "/admin/messages" }
   ]
 }
