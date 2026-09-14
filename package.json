@@ -26,6 +26,7 @@
     "next-auth": "4.24.15",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "react-easy-crop": "^6.2.3",
     "zod": "^4.6.4"
   },
   "devDependencies": {

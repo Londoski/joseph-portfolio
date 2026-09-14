@@ -2,11 +2,12 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ProjectCard } from "@/components/public/ProjectCard";
 import { ScrollDrivenTestimonials } from "@/components/public/ScrollDrivenTestimonials";
+import { ClientLogos } from "@/components/public/ClientLogos";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [settings, featured, services, testimonials] = await Promise.all([
+  const [settings, featured, services, testimonials, clientLogos] = await Promise.all([
     prisma.siteSettings.findFirst(),
     prisma.project.findMany({
       where: { featured: true, published: true },
@@ -19,6 +20,10 @@ export default async function HomePage() {
       take: 4,
     }),
     prisma.testimonial.findMany({
+      where: { published: true },
+      orderBy: { order: "asc" },
+    }),
+    prisma.clientLogo.findMany({
       where: { published: true },
       orderBy: { order: "asc" },
     }),
@@ -175,6 +180,9 @@ return (
 
       {/* TESTIMONIALS - scroll-driven glass panels */}
       <ScrollDrivenTestimonials testimonials={testimonials} />
+
+      {/* CLIENT LOGOS */}
+      <ClientLogos clients={clientLogos} />
 
       {/* CTA */}
       <section className="bg-surface border-t border-base">
