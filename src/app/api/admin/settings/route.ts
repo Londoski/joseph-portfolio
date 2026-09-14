@@ -1,0 +1,27 @@
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/admin-auth";
+
+export async function GET() {
+  if (!(await requireAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  let s = await prisma.siteSettings.findFirst();
+  if (!s) s = await prisma.siteSettings.create({ data: {} });
+  return NextResponse.json(s);
+}
+
+export async function PUT(req: Request) {
+  if (!(await requireAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    const body = await req.json();
+    let s = await prisma.siteSettings.findFirst();
+    if (!s) {
+      s = await prisma.siteSettings.create({ data: body });
+    } else {
+      s = await prisma.siteSettings.update({ where: { id: s.id }, data: body });
+    }
+    return NextResponse.json(s);
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ error: "Failed to save settings" }, { status: 500 });
+  }
+}
