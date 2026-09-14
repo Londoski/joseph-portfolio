@@ -9,13 +9,13 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 
+
 const ALLOWED_IMAGES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"];
 const ALLOWED_VIDEOS = ["video/mp4", "video/webm", "video/quicktime", "video/x-msvideo", "video/ogg"];
 
 const MAX_IMAGE_SIZE = 15 * 1024 * 1024;  // 15 MB
 const MAX_VIDEO_SIZE = 500 * 1024 * 1024; // 500 MB
 
-export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   if (!(await requireAdmin())) {

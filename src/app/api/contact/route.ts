@@ -6,6 +6,7 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 
+
 const schema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
