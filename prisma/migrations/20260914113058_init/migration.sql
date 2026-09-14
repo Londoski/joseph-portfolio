@@ -1,8 +1,99 @@
--- RedefineTables
-PRAGMA defer_foreign_keys=ON;
-PRAGMA foreign_keys=OFF;
-CREATE TABLE "new_SiteSettings" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+-- CreateTable
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "name" TEXT NOT NULL DEFAULT 'Admin',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Project" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "category" TEXT NOT NULL,
+    "client" TEXT,
+    "year" INTEGER,
+    "role" TEXT,
+    "thumbnail" TEXT,
+    "videoUrl" TEXT,
+    "gallery" TEXT,
+    "featured" BOOLEAN NOT NULL DEFAULT false,
+    "published" BOOLEAN NOT NULL DEFAULT true,
+    "order" INTEGER NOT NULL DEFAULT 0,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Project_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Service" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "icon" TEXT,
+    "order" INTEGER NOT NULL DEFAULT 0,
+    "published" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Service_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Testimonial" (
+    "id" TEXT NOT NULL,
+    "clientName" TEXT NOT NULL,
+    "company" TEXT,
+    "role" TEXT,
+    "content" TEXT NOT NULL,
+    "image" TEXT,
+    "order" INTEGER NOT NULL DEFAULT 0,
+    "published" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Testimonial_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Message" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "phone" TEXT,
+    "projectType" TEXT,
+    "budgetRange" TEXT,
+    "message" TEXT NOT NULL,
+    "read" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Message_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "SocialLink" (
+    "id" TEXT NOT NULL,
+    "platform" TEXT NOT NULL,
+    "url" TEXT NOT NULL,
+    "icon" TEXT,
+    "order" INTEGER NOT NULL DEFAULT 0,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "SocialLink_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "SiteSettings" (
+    "id" TEXT NOT NULL,
     "siteName" TEXT NOT NULL DEFAULT 'JOSEPH.',
     "heroHeading" TEXT NOT NULL DEFAULT 'FRAME YOUR STORY.',
     "heroSubtitle" TEXT NOT NULL DEFAULT 'Cinematographer - Videographer - Editor',
@@ -54,11 +145,29 @@ CREATE TABLE "new_SiteSettings" (
     "footerNavigateTitle" TEXT NOT NULL DEFAULT 'Navigate',
     "footerConnectTitle" TEXT NOT NULL DEFAULT 'Connect',
     "footerText" TEXT NOT NULL DEFAULT 'Copyright Joseph Chimaobi Egbuonu. All rights reserved.',
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "previewToken" TEXT,
+    "previewEnabled" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "SiteSettings_pkey" PRIMARY KEY ("id")
 );
-INSERT INTO "new_SiteSettings" ("aboutAvailability", "aboutBio", "aboutEmail", "aboutExperience", "aboutHeadline", "aboutImage", "aboutLocation", "aboutName", "aboutPhone", "aboutSkills", "aboutTools", "contactEmail", "contactPhone", "createdAt", "footerText", "heroCtaLabel", "heroCtaLink", "heroHeading", "heroSecondaryCta", "heroSecondaryLink", "heroSubtitle", "id", "seoDescription", "seoOgImage", "seoTitle", "updatedAt", "whatsappNumber", "whatsappQr") SELECT "aboutAvailability", "aboutBio", "aboutEmail", "aboutExperience", "aboutHeadline", "aboutImage", "aboutLocation", "aboutName", "aboutPhone", "aboutSkills", "aboutTools", "contactEmail", "contactPhone", "createdAt", "footerText", "heroCtaLabel", "heroCtaLink", "heroHeading", "heroSecondaryCta", "heroSecondaryLink", "heroSubtitle", "id", "seoDescription", "seoOgImage", "seoTitle", "updatedAt", "whatsappNumber", "whatsappQr" FROM "SiteSettings";
-DROP TABLE "SiteSettings";
-ALTER TABLE "new_SiteSettings" RENAME TO "SiteSettings";
-PRAGMA foreign_keys=ON;
-PRAGMA defer_foreign_keys=OFF;
+
+-- CreateTable
+CREATE TABLE "ThemeSettings" (
+    "id" TEXT NOT NULL,
+    "mode" TEXT NOT NULL DEFAULT 'dark',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "ThemeSettings_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Project_slug_key" ON "Project"("slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "SiteSettings_previewToken_key" ON "SiteSettings"("previewToken");
