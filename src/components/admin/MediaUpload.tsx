@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { upload } from "@vercel/blob/client";
 import { Upload, X, ImageIcon, Film } from "lucide-react";
 
 type Props = {
@@ -28,33 +29,19 @@ export function MediaUpload({ kind, value, onChange, label }: Props) {
     setProgress(0);
 
     try {
-      const fd = new FormData();
-      fd.append("file", file);
-      fd.append("kind", kind);
+      const folder = kind === "video" ? "videos" : "images";
+      const ext = file.name.split(".").pop()?.toLowerCase() || (kind === "video" ? "mp4" : "jpg");
+      const pathname = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 10)}.${ext}`;
 
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", "/api/admin/upload");
-
-      const result = await new Promise<{ url: string }>((resolve, reject) => {
-        xhr.upload.onprogress = (e) => {
-          if (e.lengthComputable) setProgress(Math.round((e.loaded / e.total) * 100));
-        };
-        xhr.onload = () => {
-          if (xhr.status >= 200 && xhr.status < 300) {
-            resolve(JSON.parse(xhr.responseText));
-          } else {
-            try {
-              reject(new Error(JSON.parse(xhr.responseText).error || "Upload failed"));
-            } catch {
-              reject(new Error("Upload failed"));
-            }
-          }
-        };
-        xhr.onerror = () => reject(new Error("Network error"));
-        xhr.send(fd);
+      const blob = await upload(pathname, file, {
+        access: "public",
+        handleUploadUrl: "/api/admin/upload",
+        onUploadProgress: ({ percentage }) => {
+          setProgress(Math.round(percentage));
+        },
       });
 
-      onChange(result.url);
+      onChange(blob.url);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Upload failed");
     } finally {
@@ -117,8 +104,17 @@ export function MediaUpload({ kind, value, onChange, label }: Props) {
         >
           {uploading ? (
             <>
-              <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-              <p className="text-base text-muted">Uploading… {progress}%</p>
+              <div className="w-full max-w-xs">
+                <div className="h-2 rounded-full bg-base overflow-hidden">
+                  <div
+                    className="h-full bg-primary transition-all duration-200"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+                <p className="text-xs text-center text-muted mt-2">
+                  Uploading directly to Blob… {progress}%
+                </p>
+              </div>
             </>
           ) : (
             <>
