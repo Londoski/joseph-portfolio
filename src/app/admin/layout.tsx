@@ -1,5 +1,7 @@
 "use client";
 
+import { InstallPrompt } from "@/components/admin/InstallPrompt";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -157,6 +159,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       <main className="flex-1 min-w-0 pt-14 md:pt-0">{children}</main>
+      <InstallPrompt />
     </div>
   );
 }
