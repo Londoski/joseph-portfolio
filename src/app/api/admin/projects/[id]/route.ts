@@ -2,51 +2,48 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-auth";
 
-export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
-  if (!(await requireAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const { id } = await params;
-  const project = await prisma.project.findUnique({ where: { id } });
-  if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 });
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+
+export async function GET() {
+  if (!(await requireAdmin()))
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const projects = await prisma.project.findMany({ orderBy: { order: "asc" } });
+  return NextResponse.json(projects);
+}
+
+export async function POST(req: Request) {
+  if (!(await requireAdmin()))
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const b = await req.json();
+  const slug = b.title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+
+  const dup = await prisma.project.findUnique({ where: { slug } });
+  const finalSlug = dup ? slug + "-" + Date.now().toString(36) : slug;
+
+  const project = await prisma.project.create({
+    data: {
+      title: b.title,
+      description: b.description,
+      category: b.category,
+      client: b.client || null,
+      year: b.year ? Number(b.year) : null,
+      role: b.role || null,
+      thumbnail: b.thumbnail || null,
+      videoUrl: b.videoUrl || null,
+      gallery: b.gallery || null,
+      featured: !!b.featured,
+      published: b.published !== false,
+      order: Number(b.order) || 0,
+      slug: finalSlug,
+    },
+  });
   return NextResponse.json(project);
-}
-
-export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  if (!(await requireAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const { id } = await params;
-
-  try {
-    const b = await req.json();
-    const project = await prisma.project.update({
-      where: { id },
-      data: {
-        title: b.title,
-        description: b.description,
-        category: b.category,
-        client: b.client || null,
-        year: b.year ? Number(b.year) : null,
-        role: b.role || null,
-        thumbnail: b.thumbnail || null,
-        videoUrl: b.videoUrl || null,
-        gallery: b.gallery || null,
-        featured: !!b.featured,
-        published: b.published !== false,
-        order: Number(b.order) || 0,
-      },
-    });
-    return NextResponse.json(project);
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json({ error: "Failed to update" }, { status: 500 });
-  }
-}
-
-export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
-  if (!(await requireAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const { id } = await params;
-  try {
-    await prisma.project.delete({ where: { id } });
-    return NextResponse.json({ ok: true });
-  } catch {
-    return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
-  }
 }

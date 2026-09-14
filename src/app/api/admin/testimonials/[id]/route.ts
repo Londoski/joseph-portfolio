@@ -3,6 +3,10 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-auth";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+
 const schema = z.object({
   clientName: z.string().min(2),
   company: z.string().optional().default(""),
@@ -13,14 +17,18 @@ const schema = z.object({
   published: z.coerce.boolean().default(true),
 });
 
-export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET() {
   if (!(await requireAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const { id } = await params;
+  const items = await prisma.testimonial.findMany({ orderBy: { order: "asc" } });
+  return NextResponse.json(items);
+}
+
+export async function POST(req: Request) {
+  if (!(await requireAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const p = schema.safeParse(await req.json());
     if (!p.success) return NextResponse.json({ error: "Invalid data" }, { status: 400 });
-    const item = await prisma.testimonial.update({
-      where: { id },
+    const item = await prisma.testimonial.create({
       data: {
         ...p.data,
         company: p.data.company || null,
@@ -30,17 +38,6 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     });
     return NextResponse.json(item);
   } catch {
-    return NextResponse.json({ error: "Failed to update" }, { status: 500 });
-  }
-}
-
-export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
-  if (!(await requireAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const { id } = await params;
-  try {
-    await prisma.testimonial.delete({ where: { id } });
-    return NextResponse.json({ ok: true });
-  } catch {
-    return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create" }, { status: 500 });
   }
 }

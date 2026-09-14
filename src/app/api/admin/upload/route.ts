@@ -5,6 +5,10 @@ import path from "path";
 import { randomBytes } from "crypto";
 import { requireAdmin } from "@/lib/admin-auth";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+
 const ALLOWED_IMAGES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"];
 const ALLOWED_VIDEOS = ["video/mp4", "video/webm", "video/quicktime", "video/x-msvideo", "video/ogg"];
 
