@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ProjectCard } from "@/components/public/ProjectCard";
 
@@ -55,7 +55,7 @@ export default async function HomePage() {
             </Link>
             <Link
               href={heroSecondaryLink}
-              className="border border-base text-base font-semibold px-7 py-3.5 rounded-full hover:bg-surface"
+              className="border-2 border-base text-base font-semibold px-7 py-3.5 rounded-full transition-all duration-200 hover:border-[var(--color-primary)] hover:text-primary hover:bg-[rgba(232,122,45,0.08)] focus:outline-none focus:border-[var(--color-primary)] focus:text-primary focus:bg-[rgba(232,122,45,0.08)] focus:shadow-[0_0_0_4px_rgba(232,122,45,0.20)] active:scale-95"
             >
               {heroSecondary}
             </Link>
@@ -144,13 +144,22 @@ export default async function HomePage() {
             </p>
             <Link
               href="/about"
-              className="inline-block border border-base text-base font-semibold px-7 py-3.5 rounded-full hover:bg-surface"
+              className="inline-block border-2 border-base text-base font-semibold px-7 py-3.5 rounded-full transition-all duration-200 hover:border-[var(--color-primary)] hover:text-primary hover:bg-[rgba(232,122,45,0.08)] focus:outline-none focus:border-[var(--color-primary)] focus:text-primary focus:bg-[rgba(232,122,45,0.08)] focus:shadow-[0_0_0_4px_rgba(232,122,45,0.20)] active:scale-95 active:border-[var(--color-primary)] active:text-primary"
             >
               More About Me
             </Link>
           </div>
-          <div className="aspect-square bg-surface border border-base rounded-3xl flex items-center justify-center">
-            <p className="text-muted text-sm">Profile Image</p>
+          <div className="relative aspect-square bg-surface border border-base rounded-3xl overflow-hidden flex items-center justify-center">
+            {settings?.aboutImage ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={settings.aboutImage}
+                alt={settings.aboutName ?? "Profile"}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <p className="text-muted text-sm">Profile Image</p>
+            )}
           </div>
         </div>
       </section>

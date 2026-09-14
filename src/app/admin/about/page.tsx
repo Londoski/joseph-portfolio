@@ -1,17 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { MediaUpload } from "@/components/admin/MediaUpload";
 
 type S = Record<string, string>;
 
-const FIELDS: { key: string; label: string; type?: "text" | "textarea" | "array" }[] = [
+const TEXT_FIELDS: { key: string; label: string; type?: "text" | "textarea" | "array" }[] = [
   { key: "aboutName", label: "Name" },
   { key: "aboutHeadline", label: "Headline" },
   { key: "aboutAvailability", label: "Availability" },
   { key: "aboutLocation", label: "Location" },
   { key: "aboutEmail", label: "About Email" },
   { key: "aboutPhone", label: "About Phone" },
-  { key: "aboutImage", label: "Profile Image URL" },
   { key: "aboutBio", label: "Bio", type: "textarea" },
   { key: "aboutExperience", label: "Experience", type: "textarea" },
   { key: "aboutSkills", label: "Skills (one per line)", type: "array" },
@@ -29,7 +29,7 @@ export default function AboutCmsPage() {
       const res = await fetch("/api/admin/settings");
       if (res.ok) {
         const json = await res.json();
-        for (const f of FIELDS) {
+        for (const f of TEXT_FIELDS) {
           if (f.type === "array") {
             try {
               const arr = json[f.key] ? JSON.parse(json[f.key]) : [];
@@ -52,7 +52,8 @@ export default function AboutCmsPage() {
   async function save() {
     setSaving(true);
     const payload: S = {};
-    for (const f of FIELDS) {
+    // text fields
+    for (const f of TEXT_FIELDS) {
       const v = data[f.key] ?? "";
       if (f.type === "array") {
         const arr = v.split("\n").map((s) => s.trim()).filter(Boolean);
@@ -61,6 +62,9 @@ export default function AboutCmsPage() {
         payload[f.key] = v;
       }
     }
+    // profile image
+    payload.aboutImage = data.aboutImage ?? "";
+
     await fetch("/api/admin/settings", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -82,7 +86,9 @@ export default function AboutCmsPage() {
         <header className="mb-6 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-base">About Content</h1>
-            <p className="text-muted text-sm mt-0.5">Bio, skills, tools and contact</p>
+            <p className="text-muted text-sm mt-0.5">
+              Bio, skills, tools, and profile image
+            </p>
           </div>
           <div className="flex items-center gap-3">
             {saved && <span className="text-xs text-green-400">Saved</span>}
@@ -96,31 +102,44 @@ export default function AboutCmsPage() {
           </div>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-5 gap-y-4">
-          {FIELDS.map((f) => {
-            const spanFull = f.type === "textarea" || f.type === "array";
-            return (
-              <div key={f.key} className={spanFull ? "lg:col-span-2" : ""}>
-                <label className="block text-[11px] uppercase tracking-widest text-muted mb-1.5">
-                  {f.label}
-                </label>
-                {spanFull ? (
-                  <textarea
-                    rows={f.type === "array" ? 4 : 3}
-                    value={data[f.key] ?? ""}
-                    onChange={(e) => update(f.key, e.target.value)}
-                    className={inputCls + " resize-y"}
-                  />
-                ) : (
-                  <input
-                    value={data[f.key] ?? ""}
-                    onChange={(e) => update(f.key, e.target.value)}
-                    className={inputCls}
-                  />
-                )}
-              </div>
-            );
-          })}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Profile Image — left column */}
+          <div className="lg:col-span-1">
+            <MediaUpload
+              kind="image"
+              label="Profile Image"
+              value={data.aboutImage ?? ""}
+              onChange={(url) => update("aboutImage", url)}
+            />
+          </div>
+
+          {/* Text fields — right two columns */}
+          <div className="lg:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-x-5 gap-y-4 content-start">
+            {TEXT_FIELDS.map((f) => {
+              const spanFull = f.type === "textarea" || f.type === "array";
+              return (
+                <div key={f.key} className={spanFull ? "lg:col-span-2" : ""}>
+                  <label className="block text-[11px] uppercase tracking-widest text-muted mb-1.5">
+                    {f.label}
+                  </label>
+                  {spanFull ? (
+                    <textarea
+                      rows={f.type === "array" ? 4 : 3}
+                      value={data[f.key] ?? ""}
+                      onChange={(e) => update(f.key, e.target.value)}
+                      className={inputCls + " resize-y"}
+                    />
+                  ) : (
+                    <input
+                      value={data[f.key] ?? ""}
+                      onChange={(e) => update(f.key, e.target.value)}
+                      className={inputCls}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

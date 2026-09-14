@@ -27,7 +27,6 @@ export function MediaUpload({ kind, value, onChange, label }: Props) {
     setError("");
     setUploading(true);
     setProgress(0);
-
     try {
       const folder = kind === "video" ? "videos" : "images";
       const ext = file.name.split(".").pop()?.toLowerCase() || (kind === "video" ? "mp4" : "jpg");
@@ -36,11 +35,8 @@ export function MediaUpload({ kind, value, onChange, label }: Props) {
       const blob = await upload(pathname, file, {
         access: "public",
         handleUploadUrl: "/api/admin/upload",
-        onUploadProgress: ({ percentage }) => {
-          setProgress(Math.round(percentage));
-        },
+        onUploadProgress: ({ percentage }) => setProgress(Math.round(percentage)),
       });
-
       onChange(blob.url);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Upload failed");
@@ -70,12 +66,20 @@ export function MediaUpload({ kind, value, onChange, label }: Props) {
 
   const Icon = kind === "image" ? ImageIcon : Film;
 
+  // Preview sizing based on orientation
   const previewWidth =
-    kind === "video" && orientation === "portrait"
-      ? "max-w-[320px]"
-      : kind === "video" && orientation === "square"
-        ? "max-w-[480px]"
+    orientation === "portrait"
+      ? "max-w-[300px]"
+      : orientation === "square"
+        ? "max-w-[380px]"
         : "w-full";
+
+  const previewAspect =
+    orientation === "portrait"
+      ? "aspect-[3/4]"
+      : orientation === "square"
+        ? "aspect-square"
+        : "aspect-video";
 
   return (
     <div className="space-y-2">
@@ -93,6 +97,7 @@ export function MediaUpload({ kind, value, onChange, label }: Props) {
         className="hidden"
       />
 
+      {/* EMPTY — dropzone */}
       {!value && (
         <button
           type="button"
@@ -103,19 +108,17 @@ export function MediaUpload({ kind, value, onChange, label }: Props) {
           className="w-full border-2 border-dashed border-base rounded-xl p-10 hover:border-[var(--color-primary)] hover:bg-[rgba(232,122,45,0.05)] transition-colors flex flex-col items-center gap-3 disabled:opacity-60"
         >
           {uploading ? (
-            <>
-              <div className="w-full max-w-xs">
-                <div className="h-2 rounded-full bg-base overflow-hidden">
-                  <div
-                    className="h-full bg-primary transition-all duration-200"
-                    style={{ width: `${progress}%` }}
-                  />
-                </div>
-                <p className="text-xs text-center text-muted mt-2">
-                  Uploading directly to Blob… {progress}%
-                </p>
+            <div className="w-full max-w-xs">
+              <div className="h-2 rounded-full bg-base overflow-hidden">
+                <div
+                  className="h-full bg-primary transition-all duration-200"
+                  style={{ width: `${progress}%` }}
+                />
               </div>
-            </>
+              <p className="text-xs text-center text-muted mt-2">
+                Uploading… {progress}%
+              </p>
+            </div>
           ) : (
             <>
               <div className="w-14 h-14 rounded-full bg-[rgba(232,122,45,0.12)] flex items-center justify-center">
@@ -135,31 +138,40 @@ export function MediaUpload({ kind, value, onChange, label }: Props) {
         </button>
       )}
 
+      {/* FILLED — preview in fixed aspect box */}
       {value && (
         <div className={previewWidth}>
-          <div className="relative group rounded-xl overflow-hidden border border-base bg-base">
+          <div
+            className={`relative group rounded-xl overflow-hidden border border-base bg-black ${previewAspect}`}
+          >
             {kind === "image" ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={value}
                 alt=""
                 onLoad={(e) =>
-                  detectOrientation(e.currentTarget.naturalWidth, e.currentTarget.naturalHeight)
+                  detectOrientation(
+                    e.currentTarget.naturalWidth,
+                    e.currentTarget.naturalHeight
+                  )
                 }
-                className="w-full h-auto max-h-[500px] object-contain bg-black"
+                className="absolute inset-0 w-full h-full object-contain"
               />
             ) : (
               <video
                 src={value}
                 controls
                 onLoadedMetadata={(e) =>
-                  detectOrientation(e.currentTarget.videoWidth, e.currentTarget.videoHeight)
+                  detectOrientation(
+                    e.currentTarget.videoWidth,
+                    e.currentTarget.videoHeight
+                  )
                 }
-                className="w-full h-auto max-h-[500px] bg-black"
+                className="absolute inset-0 w-full h-full object-contain"
               />
             )}
 
-            <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
               <button
                 type="button"
                 onClick={() => inputRef.current?.click()}
