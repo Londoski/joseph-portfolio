@@ -120,10 +120,10 @@ export default function AdminClientsPage() {
     });
   }
 
-  if (loading) return <div className="p-8 text-muted text-sm">Loading...</div>;
+  if (loading) return <div className="p-4 md:p-8 text-muted text-sm">Loading...</div>;
 
   return (
-    <div className="p-8 flex flex-col items-center">
+    <div className="p-4 md:p-8 flex flex-col items-center">
       <div className="w-full max-w-5xl">
         <header className="mb-6 flex items-center justify-between">
           <div>

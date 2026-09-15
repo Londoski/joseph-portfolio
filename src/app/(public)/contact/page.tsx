@@ -1,4 +1,4 @@
-﻿import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { ContactForm } from "@/components/public/ContactForm";
 
 export const dynamic = "force-dynamic";
@@ -8,7 +8,7 @@ export default async function ContactPage() {
   const whatsapp = settings?.whatsappNumber?.replace(/\D/g, "");
 
   return (
-    <div className="max-w-6xl mx-auto px-6 lg:px-8 py-20">
+    <div className="max-w-6xl mx-auto px-6 lg:px-8 py-12 md:py-20">
       <p className="text-xs uppercase tracking-[0.3em] text-primary mb-4">
         Contact
       </p>

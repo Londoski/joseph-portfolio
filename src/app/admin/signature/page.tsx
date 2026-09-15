@@ -108,7 +108,7 @@ export default function SignaturePage() {
     "block text-[11px] uppercase tracking-widest text-muted mb-1.5";
 
   return (
-    <div className="p-8 flex flex-col items-center">
+    <div className="p-4 md:p-8 flex flex-col items-center">
       <div className="w-full max-w-6xl">
         <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <div>

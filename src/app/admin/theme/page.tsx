@@ -6,7 +6,7 @@ export default function ThemePage() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <div className="p-8 max-w-2xl">
+    <div className="p-4 md:p-8 max-w-2xl">
       <header className="mb-8">
         <h1 className="text-3xl font-bold text-base">Theme</h1>
         <p className="text-muted mt-1">Choose how the site looks</p>

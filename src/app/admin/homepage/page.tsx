@@ -59,7 +59,7 @@ export default function HomepageCmsPage() {
     "w-full px-4 py-3 rounded-xl bg-base border border-base outline-none focus:border-[var(--color-primary)] focus:shadow-[0_0_0_4px_rgba(232,122,45,0.15)] transition-all text-sm";
 
   return (
-    <div className="p-8 flex flex-col items-center">
+    <div className="p-4 md:p-8 flex flex-col items-center">
       <div className="w-full max-w-5xl">
         <header className="mb-6 flex items-center justify-between">
           <div>

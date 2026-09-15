@@ -44,7 +44,7 @@ return (
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-[var(--bg)]" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full py-24">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full py-14 md:py-24">
           <p className="text-xs uppercase tracking-[0.3em] text-primary mb-6">
             {heroSubtitle}
           </p>
@@ -74,7 +74,7 @@ return (
       </section>
 
       {/* FEATURED WORK */}
-      <section className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
+      <section className="max-w-7xl mx-auto px-6 lg:px-8 py-14 md:py-24">
         <div className="flex items-end justify-between mb-12">
           <div>
             <p className="text-xs uppercase tracking-widest text-primary mb-3">
@@ -105,7 +105,7 @@ return (
 
       {/* SERVICES PREVIEW */}
       <section className="bg-surface border-y border-base">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-14 md:py-24">
           <p className="text-xs uppercase tracking-widest text-primary mb-3">
             What I Do
           </p>
@@ -142,7 +142,7 @@ return (
       </section>
 
       {/* ABOUT PREVIEW */}
-      <section className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
+      <section className="max-w-7xl mx-auto px-6 lg:px-8 py-14 md:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <p className="text-xs uppercase tracking-widest text-primary mb-3">
@@ -186,7 +186,7 @@ return (
 
       {/* CTA */}
       <section className="bg-surface border-t border-base">
-        <div className="max-w-4xl mx-auto px-6 lg:px-8 py-24 text-center">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8 py-14 md:py-24 text-center">
           <h2 className="text-3xl md:text-5xl font-bold text-base mb-6">
             Got a project in mind?
           </h2>

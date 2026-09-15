@@ -15,7 +15,7 @@ import {
   Share2,
   Briefcase,
   PenLine,
-  Link2,
+  BarChart3,
   Settings as SettingsIcon,
   Palette,
   Globe,
@@ -36,11 +36,12 @@ type NavItem = {
 const navItems: NavItem[] = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/projects", label: "Projects", icon: FolderKanban },
-  { href: "/admin/share-links", label: "Share Links", icon: Link2 },
+  { href: "/admin/share-links", label: "Share Links", icon: Share2 },
   { href: "/admin/services", label: "Services", icon: Sparkles },
   { href: "/admin/testimonials", label: "Testimonials", icon: Quote },
   { href: "/admin/clients", label: "Clients", icon: Briefcase },
   { href: "/admin/messages", label: "Messages", icon: Inbox },
+  { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/admin/homepage", label: "Homepage", icon: Home },
   { href: "/admin/about", label: "About", icon: User },
   { href: "/admin/social", label: "Social Links", icon: Share2 },
@@ -59,21 +60,54 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, [pathname]);
 
   return (
-    <div className="min-h-screen bg-base flex">
+    <div className="min-h-screen bg-base flex w-full overflow-x-hidden">
       {/* Mobile top bar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-surface border-b border-base flex items-center justify-between px-4 h-14">
-        <Link href="/admin" className="text-base font-bold text-primary">
+        <Link
+          href="/admin"
+          prefetch={true}
+          className="text-base font-bold text-primary"
+        >
           JCE
         </Link>
-        <button
-          onClick={() => setOpen((v) => !v)}
-          className="w-10 h-10 flex flex-col items-center justify-center gap-1.5"
-          aria-label="Toggle menu"
-        >
-          <span className={`block w-5 h-0.5 bg-base transition-transform ${open ? "rotate-45 translate-y-2" : ""}`} />
-          <span className={`block w-5 h-0.5 bg-base transition-opacity ${open ? "opacity-0" : ""}`} />
-          <span className={`block w-5 h-0.5 bg-base transition-transform ${open ? "-rotate-45 -translate-y-2" : ""}`} />
-        </button>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggleTheme}
+            aria-label={
+              theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
+            }
+            className="w-9 h-9 rounded-xl border border-base bg-base flex items-center justify-center text-muted hover:text-primary hover:border-[var(--color-primary)] transition-all"
+          >
+            {theme === "dark" ? (
+              <Sun size={16} strokeWidth={2.2} />
+            ) : (
+              <Moon size={16} strokeWidth={2.2} />
+            )}
+          </button>
+
+          <button
+            onClick={() => setOpen((v) => !v)}
+            className="w-10 h-10 flex flex-col items-center justify-center gap-1.5"
+            aria-label="Toggle menu"
+          >
+            <span
+              className={`block w-5 h-0.5 bg-base transition-transform ${
+                open ? "rotate-45 translate-y-2" : ""
+              }`}
+            />
+            <span
+              className={`block w-5 h-0.5 bg-base transition-opacity ${
+                open ? "opacity-0" : ""
+              }`}
+            />
+            <span
+              className={`block w-5 h-0.5 bg-base transition-transform ${
+                open ? "-rotate-45 -translate-y-2" : ""
+              }`}
+            />
+          </button>
+        </div>
       </div>
 
       {open && (
@@ -91,7 +125,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       >
         <div className="px-5 py-5 border-b border-base flex items-center justify-between">
           <div>
-            <Link href="/" className="text-lg font-bold text-primary">
+            <Link
+              href="/"
+              prefetch={true}
+              className="text-lg font-bold text-primary"
+            >
               JCE
             </Link>
             <p className="text-[10px] uppercase tracking-widest text-muted mt-0.5">
@@ -99,11 +137,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </p>
           </div>
 
-          {/* Theme toggle — compact icon button */}
           <button
             onClick={toggleTheme}
-            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-            title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            aria-label={
+              theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
+            }
+            title={
+              theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
+            }
             className="group relative w-9 h-9 rounded-xl border border-base bg-base flex items-center justify-center text-muted hover:text-primary hover:border-[var(--color-primary)] hover:shadow-[0_0_12px_rgba(232,122,45,0.35)] transition-all"
           >
             {theme === "dark" ? (
@@ -114,7 +155,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </button>
         </div>
 
-        <nav className="flex-1 p-3 overflow-y-auto">
+        <nav className="flex-1 p-3 overflow-y-auto overflow-x-hidden">
           {navItems.map((item) => {
             const active =
               item.href === "/admin"
@@ -125,6 +166,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={true}
                 className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm mb-1 transition-all duration-150 ${
                   active
                     ? "bg-[rgba(232,122,45,0.12)] text-primary font-bold shadow-[inset_0_0_0_1px_rgba(232,122,45,0.4)]"
@@ -164,6 +206,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="p-3 border-t border-base space-y-1">
           <Link
             href="/"
+            prefetch={true}
             className="group flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold text-muted transition-all duration-150 hover:text-primary hover:bg-[rgba(232,122,45,0.08)] hover:shadow-[inset_0_0_0_1px_rgba(232,122,45,0.35)]"
           >
             <Globe
@@ -183,7 +226,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </aside>
 
-      <main className="flex-1 min-w-0 pt-14 md:pt-0">{children}</main>
+      <main className="flex-1 min-w-0 w-full pt-14 md:pt-0 overflow-x-hidden">
+        {children}
+      </main>
       <InstallPrompt />
     </div>
   );

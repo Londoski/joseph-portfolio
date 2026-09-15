@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -16,7 +16,7 @@ export default async function AboutPage() {
   } catch {}
 
   return (
-    <div className="max-w-6xl mx-auto px-6 lg:px-8 py-20">
+    <div className="max-w-6xl mx-auto px-6 lg:px-8 py-12 md:py-20">
       <p className="text-xs uppercase tracking-[0.3em] text-primary mb-4">
         About
       </p>

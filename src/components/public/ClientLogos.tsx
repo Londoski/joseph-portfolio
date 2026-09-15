@@ -139,8 +139,9 @@ function LogoCard({ client }: { client: Client }) {
   return (
     <Wrapper
       {...(linkProps as Record<string, string>)}
-      className="group flex-shrink-0 w-[180px] h-[100px] rounded-2xl border border-base bg-surface flex items-center justify-center p-5 transition-all hover:border-[var(--color-primary)] hover:bg-[rgba(232,122,45,0.06)]"
+      className="group flex-shrink-0 w-[180px] h-[110px] rounded-2xl border border-base flex items-center justify-center p-5 transition-all hover:border-[var(--color-primary)] hover:shadow-[0_0_24px_rgba(232,122,45,0.25)]"
       style={{
+        background: "rgba(255,255,255,0.06)",
         backdropFilter: "blur(12px)",
       }}
     >
@@ -148,7 +149,7 @@ function LogoCard({ client }: { client: Client }) {
       <img
         src={client.logoUrl}
         alt={client.name}
-        className="max-w-full max-h-full object-contain opacity-60 group-hover:opacity-100 grayscale group-hover:grayscale-0 transition-all duration-300"
+        className="max-w-full max-h-full object-contain opacity-95 transition-all duration-300 group-hover:scale-105"
         loading="lazy"
       />
     </Wrapper>

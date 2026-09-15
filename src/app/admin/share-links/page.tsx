@@ -44,7 +44,7 @@ export default function ShareLinksPage() {
   }
 
   return (
-    <div className="p-8 flex flex-col items-center">
+    <div className="p-4 md:p-8 flex flex-col items-center">
       <div className="w-full max-w-4xl">
         <header className="mb-8">
           <h1 className="text-2xl font-bold text-base">Share Your Site</h1>

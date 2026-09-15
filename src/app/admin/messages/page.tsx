@@ -51,7 +51,7 @@ export default function AdminMessagesPage() {
   }
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
       <header className="mb-6">
         <h1 className="text-2xl font-bold text-base">Messages</h1>
         <p className="text-muted text-sm mt-0.5">Contact form submissions</p>

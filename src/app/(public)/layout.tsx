@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/public/Navbar";
 import { Footer } from "@/components/public/Footer";
+import { PageViewTracker } from "@/components/public/PageViewTracker";
 
 export default function PublicLayout({
   children,
@@ -8,6 +9,7 @@ export default function PublicLayout({
 }) {
   return (
     <div className="min-h-screen flex flex-col bg-base">
+      <PageViewTracker />
       <Navbar />
       <main className="flex-1">{children}</main>
       <Footer />

@@ -20,7 +20,7 @@ export function Navbar() {
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     onScroll();
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -39,6 +39,7 @@ export function Navbar() {
       <nav className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-20">
         <Link
           href="/"
+          prefetch={true}
           className="text-lg font-bold tracking-widest text-base hover:text-primary transition-colors"
         >
           JOSEPH<span className="text-primary">.</span>
@@ -54,6 +55,7 @@ export function Navbar() {
               <li key={link.href}>
                 <Link
                   href={link.href}
+                  prefetch={true}
                   className={`text-sm tracking-wide uppercase transition-colors ${
                     active ? "text-primary" : "text-muted hover:text-base"
                   }`}
@@ -67,7 +69,8 @@ export function Navbar() {
 
         <Link
           href="/contact"
-          className="hidden md:inline-flex bg-primary text-white text-sm font-semibold px-5 py-2.5 rounded-full"
+          prefetch={true}
+          className="hidden md:inline-flex bg-primary text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-all hover:shadow-[0_0_20px_rgba(232,122,45,0.35)]"
         >
           Let&apos;s Talk
         </Link>
@@ -102,12 +105,22 @@ export function Navbar() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="block py-2 text-base hover:text-primary"
+                  prefetch={true}
+                  className="block py-2 text-base hover:text-primary transition-colors"
                 >
                   {link.label}
                 </Link>
               </li>
             ))}
+            <li>
+              <Link
+                href="/contact"
+                prefetch={true}
+                className="inline-block mt-2 bg-primary text-white text-sm font-semibold px-5 py-2.5 rounded-full"
+              >
+                Let&apos;s Talk
+              </Link>
+            </li>
           </ul>
         </div>
       )}

@@ -28,7 +28,7 @@ export default function AdminTestimonialsPage() {
   }
 
   return (
-    <div className="p-8 flex flex-col items-center">
+    <div className="p-4 md:p-8 flex flex-col items-center">
       <div className="w-full max-w-5xl">
         <header className="mb-6 flex items-center justify-between">
           <div>
