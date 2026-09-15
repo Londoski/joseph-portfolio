@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { sendContactNotification } from "@/lib/email";
+import { sendPushToAdmins } from "@/lib/push";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -38,7 +39,7 @@ export async function POST(req: Request) {
       },
     });
 
-    // Send email notification (non-blocking, errors are logged)
+    // Send email notification
     sendContactNotification({
       name: parsed.data.name,
       email: parsed.data.email,
@@ -46,9 +47,17 @@ export async function POST(req: Request) {
       projectType: parsed.data.projectType || null,
       budgetRange: parsed.data.budgetRange || null,
       message: parsed.data.message,
-    }).catch((err) => {
-      console.error("Notification error:", err);
-    });
+    }).catch((err) => console.error("Email error:", err));
+
+    // Send push notification to admins
+    sendPushToAdmins({
+      title: "New Message from " + parsed.data.name,
+      body:
+        parsed.data.message.slice(0, 120) +
+        (parsed.data.message.length > 120 ? "..." : ""),
+      url: "/admin/messages",
+      tag: "msg-" + message.id,
+    }).catch((err) => console.error("Push error:", err));
 
     return NextResponse.json({ ok: true, id: message.id });
   } catch (err) {
