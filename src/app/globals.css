@@ -9,7 +9,6 @@
 @layer base {
   /* ============================================
      DARK THEME — DEFAULT FOR THE ENTIRE SITE
-     Public pages always use these values
      ============================================ */
   :root {
     --bg: #0A0A0A;
@@ -22,7 +21,6 @@
   /* ============================================
      LIGHT THEME — ONLY WHEN EXPLICITLY APPLIED
      Applied by the admin layout wrapper <div data-theme="light">
-     Public pages never use this
      ============================================ */
   [data-theme="light"] {
     --bg: #FFFFFF;
@@ -87,4 +85,63 @@ img, video, canvas, svg, iframe {
 
 table {
   max-width: 100%;
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   Mobile: completely hidden for app-like feel
+   Desktop: slim orange premium scrollbar
+   ============================================ */
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #E87A2D transparent;
+}
+
+/* WebKit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E87A2D;
+  border-radius: 999px;
+  opacity: 0.6;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #D06A1D;
+}
+
+/* Mobile — completely hide scrollbars for app feel */
+@media (max-width: 768px) {
+  html,
+  body,
+  * {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  ::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    display: none !important;
+    background: transparent !important;
+  }
+
+  ::-webkit-scrollbar-track {
+    display: none !important;
+    background: transparent !important;
+  }
 }
