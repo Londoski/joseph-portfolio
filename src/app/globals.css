@@ -7,9 +7,6 @@
 }
 
 @layer base {
-  /* ============================================
-     DARK THEME — DEFAULT FOR THE ENTIRE SITE
-     ============================================ */
   :root {
     --bg: #0A0A0A;
     --surface: #141414;
@@ -18,10 +15,6 @@
     --border: #2A2A2A;
   }
 
-  /* ============================================
-     LIGHT THEME — ONLY WHEN EXPLICITLY APPLIED
-     Applied by the admin layout wrapper <div data-theme="light">
-     ============================================ */
   [data-theme="light"] {
     --bg: #FFFFFF;
     --surface: #F5F5F5;
@@ -88,18 +81,13 @@ table {
 }
 
 /* ============================================
-   SCROLLBAR STYLING
-   Mobile: completely hidden for app-like feel
-   Desktop: slim orange premium scrollbar
+   SCROLLBAR — DESKTOP DEFAULT
    ============================================ */
-
-/* Firefox */
 * {
   scrollbar-width: thin;
   scrollbar-color: #E87A2D transparent;
 }
 
-/* WebKit (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -112,15 +100,20 @@ table {
 ::-webkit-scrollbar-thumb {
   background: #E87A2D;
   border-radius: 999px;
-  opacity: 0.6;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #D06A1D;
 }
 
-/* Mobile — completely hide scrollbars for app feel */
-@media (max-width: 768px) {
+/* ============================================
+   SCROLLBAR — HIDDEN ON TOUCH DEVICES + PWA
+   Uses device capabilities, not screen width
+   Catches: phones, tablets, PWA standalone mode
+   ============================================ */
+
+/* Touch-only devices (no mouse) — phones, tablets */
+@media (hover: none) and (pointer: coarse) {
   html,
   body,
   * {
@@ -135,13 +128,50 @@ table {
     background: transparent !important;
   }
 
-  ::-webkit-scrollbar-thumb {
+  ::-webkit-scrollbar-thumb,
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
     display: none !important;
     background: transparent !important;
   }
+}
 
+/* PWA standalone mode (installed app) — always hide scrollbars */
+@media (display-mode: standalone) {
+  html,
+  body,
+  * {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  ::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  ::-webkit-scrollbar-thumb,
   ::-webkit-scrollbar-track {
     display: none !important;
-    background: transparent !important;
+  }
+
+  /* Prevent pull-to-refresh inside the PWA */
+  body {
+    overscroll-behavior-y: none;
+  }
+}
+
+/* iOS Safari PWA (Apple's non-standard standalone detection) */
+@media (display-mode: fullscreen) {
+  html,
+  body,
+  * {
+    scrollbar-width: none !important;
+  }
+
+  ::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
   }
 }
