@@ -5,7 +5,11 @@ import { MediaUpload } from "@/components/admin/MediaUpload";
 
 type S = Record<string, string>;
 
-const TEXT_FIELDS: { key: string; label: string; type?: "text" | "textarea" | "array" }[] = [
+const TEXT_FIELDS: {
+  key: string;
+  label: string;
+  type?: "text" | "textarea" | "array";
+}[] = [
   { key: "aboutName", label: "Name" },
   { key: "aboutHeadline", label: "Headline" },
   { key: "aboutAvailability", label: "Availability" },
@@ -52,7 +56,6 @@ export default function AboutCmsPage() {
   async function save() {
     setSaving(true);
     const payload: S = {};
-    // text fields
     for (const f of TEXT_FIELDS) {
       const v = data[f.key] ?? "";
       if (f.type === "array") {
@@ -62,7 +65,6 @@ export default function AboutCmsPage() {
         payload[f.key] = v;
       }
     }
-    // profile image
     payload.aboutImage = data.aboutImage ?? "";
 
     await fetch("/api/admin/settings", {
@@ -83,9 +85,11 @@ export default function AboutCmsPage() {
   return (
     <div className="p-4 md:p-8 flex flex-col items-center">
       <div className="w-full max-w-5xl">
-        <header className="mb-6 flex items-center justify-between">
+        <header className="mb-6 flex items-center justify-between flex-wrap gap-3">
           <div>
-            <h1 className="text-2xl font-bold text-base">About Content</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-base">
+              About Content
+            </h1>
             <p className="text-muted text-sm mt-0.5">
               Bio, skills, tools, and profile image
             </p>
@@ -103,7 +107,7 @@ export default function AboutCmsPage() {
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Profile Image — left column */}
+          {/* Profile Image */}
           <div className="lg:col-span-1">
             <MediaUpload
               kind="image"
@@ -113,7 +117,7 @@ export default function AboutCmsPage() {
             />
           </div>
 
-          {/* Text fields — right two columns */}
+          {/* Text fields */}
           <div className="lg:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-x-5 gap-y-4 content-start">
             {TEXT_FIELDS.map((f) => {
               const spanFull = f.type === "textarea" || f.type === "array";

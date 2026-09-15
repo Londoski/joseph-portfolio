@@ -1,9 +1,22 @@
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const project = await prisma.project.findUnique({ where: { slug } });
+  if (!project) return { title: "Project Not Found" };
+  return {
+    title: `${project.title} — Joseph Chimaobi Egbuonu`,
+    description: project.description.slice(0, 160),
+  };
+}
 
 export default async function ProjectDetailPage({
   params,
@@ -11,18 +24,20 @@ export default async function ProjectDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+
   const project = await prisma.project.findUnique({ where: { slug } });
   if (!project || !project.published) notFound();
 
-  const all = await prisma.project.findMany({
+  const allProjects = await prisma.project.findMany({
     where: { published: true },
     orderBy: { order: "asc" },
     select: { slug: true, title: true },
   });
 
-  const idx = all.findIndex((p) => p.slug === project.slug);
-  const prev = idx > 0 ? all[idx - 1] : null;
-  const next = idx < all.length - 1 ? all[idx + 1] : null;
+  const index = allProjects.findIndex((p) => p.slug === project.slug);
+  const prev = index > 0 ? allProjects[index - 1] : null;
+  const next =
+    index < allProjects.length - 1 ? allProjects[index + 1] : null;
 
   let gallery: string[] = [];
   try {
@@ -32,36 +47,41 @@ export default async function ProjectDetailPage({
   }
 
   return (
-    <article className="max-w-6xl mx-auto px-6 lg:px-8 py-20">
-      <Link href="/work" className="text-sm text-muted hover:text-primary">
-        Back to Work
+    <article className="w-full max-w-6xl mx-auto px-6 lg:px-8 py-12 md:py-20">
+      <Link
+        href="/work"
+        prefetch={true}
+        className="text-sm text-muted hover:text-primary transition-colors"
+      >
+        ← Back to Work
       </Link>
 
-      <header className="mt-8 mb-12">
+      <header className="mt-8 mb-8 md:mb-12">
         <div className="flex items-center gap-3 text-xs text-muted uppercase tracking-widest mb-4">
           <span className="text-primary">{project.category}</span>
           {project.year && <span>· {project.year}</span>}
         </div>
-        <h1 className="text-4xl md:text-6xl font-bold text-base leading-tight">
+        <h1 className="text-3xl md:text-6xl font-bold text-base leading-tight">
           {project.title}
         </h1>
       </header>
 
-      <div className="relative aspect-video bg-surface border border-base rounded-2xl overflow-hidden mb-12">
+      {/* Hero media */}
+      <div className="relative aspect-video bg-surface border border-base rounded-2xl overflow-hidden mb-8 md:mb-12">
         {project.videoUrl ? (
           <video
             src={project.videoUrl}
             controls
             playsInline
+            preload="metadata"
             className="absolute inset-0 w-full h-full object-contain bg-black"
           />
         ) : project.thumbnail ? (
-          <Image
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
             src={project.thumbnail}
             alt={project.title}
-            fill
-            className="object-cover"
-            priority
+            className="absolute inset-0 w-full h-full object-cover"
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-muted">
@@ -70,7 +90,8 @@ export default async function ProjectDetailPage({
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+      {/* Info grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-12 md:mb-16">
         <div className="md:col-span-2">
           <h2 className="text-xs uppercase tracking-widest text-primary mb-4">
             About this project
@@ -83,51 +104,93 @@ export default async function ProjectDetailPage({
         <aside className="space-y-6">
           {project.client && (
             <div>
-              <p className="text-xs uppercase tracking-widest text-muted mb-1">Client</p>
+              <p className="text-xs uppercase tracking-widest text-muted mb-1">
+                Client
+              </p>
               <p className="text-base">{project.client}</p>
             </div>
           )}
           {project.role && (
             <div>
-              <p className="text-xs uppercase tracking-widest text-muted mb-1">Role</p>
+              <p className="text-xs uppercase tracking-widest text-muted mb-1">
+                Role
+              </p>
               <p className="text-base">{project.role}</p>
             </div>
           )}
           {project.year && (
             <div>
-              <p className="text-xs uppercase tracking-widest text-muted mb-1">Year</p>
+              <p className="text-xs uppercase tracking-widest text-muted mb-1">
+                Year
+              </p>
               <p className="text-base">{project.year}</p>
             </div>
           )}
+          <div>
+            <p className="text-xs uppercase tracking-widest text-muted mb-1">
+              Category
+            </p>
+            <p className="text-base">{project.category}</p>
+          </div>
         </aside>
       </div>
 
+      {/* Gallery */}
       {gallery.length > 0 && (
-        <section className="mb-16">
-          <h2 className="text-xs uppercase tracking-widest text-primary mb-6">Gallery</h2>
+        <section className="mb-12 md:mb-16">
+          <h2 className="text-xs uppercase tracking-widest text-primary mb-6">
+            Gallery
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {gallery.map((src, i) => (
-              <div key={i} className="relative aspect-video bg-surface border border-base rounded-xl overflow-hidden">
-                <Image src={src} alt={project.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
+              <div
+                key={i}
+                className="relative aspect-video bg-surface border border-base rounded-xl overflow-hidden"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={src}
+                  alt={`${project.title} — ${i + 1}`}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
             ))}
           </div>
         </section>
       )}
 
+      {/* Prev / Next */}
       <nav className="border-t border-base pt-8 flex justify-between gap-4">
         {prev ? (
-          <Link href={`/work/${prev.slug}`} className="group max-w-[45%]">
-            <p className="text-xs uppercase tracking-widest text-muted mb-1">Previous</p>
-            <p className="text-base group-hover:text-primary">{prev.title}</p>
+          <Link
+            href={`/work/${prev.slug}`}
+            prefetch={true}
+            className="group text-left max-w-[45%]"
+          >
+            <p className="text-xs uppercase tracking-widest text-muted mb-1">
+              ← Previous
+            </p>
+            <p className="text-base group-hover:text-primary transition-colors">
+              {prev.title}
+            </p>
           </Link>
         ) : (
           <div />
         )}
         {next ? (
-          <Link href={`/work/${next.slug}`} className="group text-right max-w-[45%] ml-auto">
-            <p className="text-xs uppercase tracking-widest text-muted mb-1">Next</p>
-            <p className="text-base group-hover:text-primary">{next.title}</p>
+          <Link
+            href={`/work/${next.slug}`}
+            prefetch={true}
+            className="group text-right max-w-[45%] ml-auto"
+          >
+            <p className="text-xs uppercase tracking-widest text-muted mb-1">
+              Next →
+            </p>
+            <p className="text-base group-hover:text-primary transition-colors">
+              {next.title}
+            </p>
           </Link>
         ) : (
           <div />

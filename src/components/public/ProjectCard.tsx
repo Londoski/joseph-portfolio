@@ -1,5 +1,4 @@
 ﻿import Link from "next/link";
-import Image from "next/image";
 
 type Project = {
   id: string;
@@ -14,16 +13,18 @@ export function ProjectCard({ project }: { project: Project }) {
   return (
     <Link
       href={`/work/${project.slug}`}
+      prefetch={true}
       className="group block bg-surface border border-base rounded-2xl overflow-hidden hover:border-[var(--color-primary)] transition-colors"
     >
       <div className="relative aspect-video bg-black overflow-hidden">
         {project.thumbnail ? (
-          <Image
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
             src={project.thumbnail}
             alt={project.title}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
-            sizes="(max-width: 768px) 100vw, 33vw"
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-muted text-sm">
