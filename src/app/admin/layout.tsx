@@ -14,6 +14,7 @@ import {
   User,
   Share2,
   Briefcase,
+  PenLine,
   Link2,
   Settings as SettingsIcon,
   Palette,
@@ -43,6 +44,7 @@ const navItems: NavItem[] = [
   { href: "/admin/homepage", label: "Homepage", icon: Home },
   { href: "/admin/about", label: "About", icon: User },
   { href: "/admin/social", label: "Social Links", icon: Share2 },
+  { href: "/admin/signature", label: "Signature", icon: PenLine },
   { href: "/admin/settings", label: "Settings", icon: SettingsIcon },
   { href: "/admin/theme", label: "Theme", icon: Palette },
 ];
