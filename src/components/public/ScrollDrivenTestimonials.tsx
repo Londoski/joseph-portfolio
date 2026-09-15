@@ -29,15 +29,16 @@ export function ScrollDrivenTestimonials({
 
   if (testimonials.length === 0) return null;
 
+  // Reduced motion — static horizontal scroll
   if (reduced) {
     return (
-      <section className="py-24 relative overflow-hidden">
+      <section className="relative py-16 md:py-24 overflow-hidden w-full max-w-full">
         <DecorativeBackground />
         <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 text-center mb-12">
           <p className="text-xs uppercase tracking-[0.3em] text-primary mb-3">
             Testimonials
           </p>
-          <h2 className="text-3xl md:text-5xl font-bold text-base">
+          <h2 className="text-2xl md:text-5xl font-bold text-base">
             What Clients Say
           </h2>
         </div>
@@ -50,28 +51,29 @@ export function ScrollDrivenTestimonials({
     );
   }
 
+  // Triple for seamless loop
   const doubled = [...testimonials, ...testimonials, ...testimonials];
 
   return (
-    <section className="relative py-24 overflow-hidden">
-      {/* Colorful background so glass has something to blur */}
+    <section className="relative py-16 md:py-24 overflow-hidden w-full max-w-full">
+      {/* Colorful blurred background for glass effect */}
       <DecorativeBackground />
 
       {/* Heading */}
-      <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 text-center mb-16">
+      <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 text-center mb-10 md:mb-16">
         <p className="text-xs uppercase tracking-[0.3em] text-primary mb-3">
           Testimonials
         </p>
-        <h2 className="text-3xl md:text-5xl font-bold text-base">
+        <h2 className="text-2xl md:text-5xl font-bold text-base">
           What Clients Say
         </h2>
       </div>
 
       {/* Marquee viewport */}
-      <div className="relative z-10">
+      <div className="relative z-10 overflow-hidden w-full max-w-full">
         {/* Left fade */}
         <div
-          className="absolute left-0 top-0 bottom-0 w-24 md:w-48 z-10 pointer-events-none"
+          className="absolute left-0 top-0 bottom-0 w-16 md:w-48 z-20 pointer-events-none"
           style={{
             background:
               "linear-gradient(to right, var(--bg) 0%, transparent 100%)",
@@ -79,7 +81,7 @@ export function ScrollDrivenTestimonials({
         />
         {/* Right fade */}
         <div
-          className="absolute right-0 top-0 bottom-0 w-24 md:w-48 z-10 pointer-events-none"
+          className="absolute right-0 top-0 bottom-0 w-16 md:w-48 z-20 pointer-events-none"
           style={{
             background:
               "linear-gradient(to left, var(--bg) 0%, transparent 100%)",
@@ -87,7 +89,7 @@ export function ScrollDrivenTestimonials({
         />
 
         {/* Sliding track */}
-        <div className="marquee-track flex gap-6">
+        <div className="marquee-track flex gap-4 md:gap-6">
           {doubled.map((t, i) => (
             <GlassTestimonial key={t.id + "-" + i} t={t} />
           ))}
@@ -100,7 +102,6 @@ export function ScrollDrivenTestimonials({
           animation: marquee-slide 30s linear infinite;
           will-change: transform;
         }
-
 
         @keyframes marquee-slide {
           0% {
@@ -118,40 +119,40 @@ export function ScrollDrivenTestimonials({
 function DecorativeBackground() {
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {/* Big soft orange blob top-left */}
+      {/* Orange blob top-left */}
       <div
-        className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full"
+        className="absolute -top-40 -left-40 w-[400px] md:w-[600px] h-[400px] md:h-[600px] rounded-full"
         style={{
           background:
             "radial-gradient(circle, rgba(232,122,45,0.45), transparent 70%)",
           filter: "blur(60px)",
         }}
       />
-      {/* Big soft orange blob bottom-right */}
+      {/* Orange blob bottom-right */}
       <div
-        className="absolute -bottom-40 -right-40 w-[700px] h-[700px] rounded-full"
+        className="absolute -bottom-40 -right-40 w-[500px] md:w-[700px] h-[500px] md:h-[700px] rounded-full"
         style={{
           background:
             "radial-gradient(circle, rgba(232,122,45,0.35), transparent 70%)",
           filter: "blur(80px)",
         }}
       />
-      {/* Small pink/warm accent center */}
+      {/* Warm accent center */}
       <div
-        className="absolute top-1/3 left-1/2 w-[500px] h-[500px] rounded-full -translate-x-1/2"
+        className="absolute top-1/3 left-1/2 w-[300px] md:w-[500px] h-[300px] md:h-[500px] rounded-full -translate-x-1/2"
         style={{
           background:
             "radial-gradient(circle, rgba(255,90,90,0.18), transparent 70%)",
           filter: "blur(80px)",
         }}
       />
-      {/* Subtle grid overlay */}
+      {/* Grid overlay */}
       <div
         className="absolute inset-0 opacity-[0.05]"
         style={{
           backgroundImage:
             "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
-          backgroundSize: "80px 80px",
+          backgroundSize: "60px 60px",
         }}
       />
     </div>
@@ -161,7 +162,7 @@ function DecorativeBackground() {
 function GlassTestimonial({ t }: { t: Testimonial }) {
   return (
     <article
-      className="flex-shrink-0 w-[85vw] sm:w-[70vw] md:w-[55vw] lg:w-[42vw] xl:w-[36vw] rounded-3xl p-8 md:p-10 border relative"
+      className="flex-shrink-0 w-[85vw] sm:w-[70vw] md:w-[55vw] lg:w-[42vw] xl:w-[36vw] rounded-2xl md:rounded-3xl p-5 md:p-10 border relative"
       style={{
         background: "rgba(255,255,255,0.08)",
         backdropFilter: "blur(28px) saturate(180%)",
@@ -171,7 +172,7 @@ function GlassTestimonial({ t }: { t: Testimonial }) {
           "0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -1px 0 rgba(255,255,255,0.04)",
       }}
     >
-      {/* Subtle top highlight */}
+      {/* Top highlight line */}
       <div
         className="absolute inset-x-0 top-0 h-px pointer-events-none"
         style={{
@@ -181,33 +182,36 @@ function GlassTestimonial({ t }: { t: Testimonial }) {
       />
 
       <Quote
-        size={28}
-        className="text-primary mb-6"
+        size={24}
+        className="text-primary mb-4 md:mb-6 md:w-7 md:h-7"
         strokeWidth={2.5}
         style={{ filter: "drop-shadow(0 0 12px rgba(232,122,45,0.5))" }}
       />
 
-      <p className="text-lg md:text-xl leading-relaxed text-white font-light italic min-h-[180px] md:min-h-[200px]">
+      <p className="text-sm md:text-xl leading-relaxed text-white font-light italic min-h-[120px] md:min-h-[200px]">
         {"\u201C" + t.content + "\u201D"}
       </p>
 
-      <div className="mt-8 pt-6 border-t border-white/15 flex items-center gap-4">
+      <div className="mt-5 md:mt-8 pt-4 md:pt-6 border-t border-white/15 flex items-center gap-3 md:gap-4">
         {t.image ? (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={t.image}
             alt={t.clientName}
-            className="w-14 h-14 rounded-full object-cover border border-white/25"
+            className="w-10 h-10 md:w-14 md:h-14 rounded-full object-cover border border-white/25 flex-shrink-0"
           />
         ) : (
-          <div className="w-14 h-14 rounded-full bg-[rgba(232,122,45,0.25)] border border-[rgba(232,122,45,0.5)] flex items-center justify-center flex-shrink-0">
-            <span className="text-primary font-bold text-lg">
+          <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-[rgba(232,122,45,0.25)] border border-[rgba(232,122,45,0.5)] flex items-center justify-center flex-shrink-0">
+            <span className="text-primary font-bold text-sm md:text-lg">
               {t.clientName.charAt(0).toUpperCase()}
             </span>
           </div>
         )}
-        <div>
-          <p className="text-base font-semibold text-white">{t.clientName}</p>
-          <p className="text-xs text-white/70">
+        <div className="min-w-0">
+          <p className="text-xs md:text-base font-semibold text-white truncate">
+            {t.clientName}
+          </p>
+          <p className="text-[10px] md:text-xs text-white/70 truncate">
             {[t.role, t.company].filter(Boolean).join(" \u00B7 ") || "Client"}
           </p>
         </div>

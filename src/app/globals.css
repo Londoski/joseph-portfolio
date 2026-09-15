@@ -57,11 +57,29 @@
    Prevent horizontal overflow + ensure images scale
    ============================================ */
 
-html, body {
+html {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+body {
   overflow-x: hidden;
   max-width: 100vw;
+  width: 100%;
+  position: relative;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+}
+
+/* Marquee sections — critical clipping */
+.marquee-clip {
+  overflow: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+.marquee-clip > * {
+  will-change: transform;
 }
 
 /* Every element respects container width */
