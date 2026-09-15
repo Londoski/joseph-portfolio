@@ -60,7 +60,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, [pathname]);
 
   return (
-    <div className="min-h-screen bg-base flex w-full overflow-x-hidden">
+    <div
+      data-theme={theme}
+      className="min-h-screen bg-base flex w-full overflow-x-hidden"
+    >
       {/* Mobile top bar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-surface border-b border-base flex items-center justify-between px-4 h-14">
         <Link
